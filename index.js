@@ -1,30 +1,16 @@
-const userData$ = Rx.Observable.ajax({
-  url: "https://api.quotable.io/random",
-  method: "GET",
-});
+// const userData$ = Rx.Observable.ajax({
+//   url: "https://api.quotable.io/random",
+//   method: "GET",
+// });
 const click$ = Rx.Observable
   .fromEvent(document, "click");
 
-const resWhenClick$$ = click$
-  // .mergeMap((ev) => userData$)
-  .flatMap((ev) => userData$)
+const tickWhenClick$ = click$
+  .flatMap((ev) => Rx.Observable.interval(500))
 
-/*
------c--------------c-------
-     \              \
-      ---r----       ---r--
-
-      mergeAll OR flatMap
-
---------r------------r------
-*/
-
-resWhenClick$$.subscribe({
-  next: function fetchOnClick(data) {
-    const pretty = JSON.stringify(data, null, 2);
-    console.log(`\n### pretty: \n${pretty}`)
-  },
-});
+tickWhenClick$.subscribe((data) => {
+  console.log(data)
+})
 
 function displayInPreview(string) {
   var newDiv = document.createElement("div");

@@ -6,8 +6,7 @@ const click$ = Rx.Observable
   .fromEvent(document, "click");
 
 const resWhenClick$$ = click$
-  .map((ev) => userData$)
-  .mergeAll();
+  .mergeMap((ev) => userData$)
 
 /*
 -----c--------------c-------

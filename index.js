@@ -1,16 +1,30 @@
-const length$ = Rx.Observable.of(5);
-const width$ = Rx.Observable.of(7);
-const height$ = Rx.Observable.of(2.8, 2.5);
+const dotElem = document.getElementById('dotElem')
+function updateDot(x, y) {
+  dotElem.style.left = `${x}px`;
+  dotElem.style.top = `${y}px`;
+}
 
-// const volume$ = Rx.Observable
-//   .zip(length$, width$, height$,
-//     (l, w, h) => l * w * h
-//   );
-const volume$ = Rx.Observable.combineLatest(
-  length$,
-  width$,
-  height$,
-  (l, w, h) => l * w * h
-);
+const click$ = Rx.Observable.fromEvent(document, 'click');
 
-volume$.subscribe(console.log.bind(console));
+click$.subscribe(ev => updateDot(ev.clientX, ev.clientY));
+
+const res$ = click$
+  .switchMap(ev => Rx.Observable.ajax({
+    url: 'https://jsonplaceholder.typicode.com/users/1',
+    method: 'GET',
+  }));
+
+res$.subscribe(function (data) {
+  console.log(data.response) || displayInPreview(data.response);
+});
+
+
+
+
+// display in plunker preview
+function displayInPreview(string) {
+  var newDiv = document.createElement("div");
+  var newContent = document.createTextNode(string);
+  newDiv.appendChild(newContent);
+  document.body.appendChild(newDiv)
+}

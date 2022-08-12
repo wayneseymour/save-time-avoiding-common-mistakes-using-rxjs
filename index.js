@@ -6,14 +6,15 @@ const click$ = Rx.Observable
   .fromEvent(document, "click");
 
 const resWhenClick$$ = click$
-  .mergeMap((ev) => userData$)
+  // .mergeMap((ev) => userData$)
+  .flatMap((ev) => userData$)
 
 /*
 -----c--------------c-------
      \              \
       ---r----       ---r--
 
-      mergeAll
+      mergeAll OR flatMap
 
 --------r------------r------
 */
@@ -21,7 +22,7 @@ const resWhenClick$$ = click$
 resWhenClick$$.subscribe({
   next: function fetchOnClick(data) {
     const pretty = JSON.stringify(data, null, 2);
-    console.log(`\n### x: \n\t${pretty}`) || displayInPreview(pretty);
+    console.log(`\n### pretty: \n${pretty}`)
   },
 });
 

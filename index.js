@@ -1,28 +1,20 @@
-const click$ = Rx.Observable.create(
-  function subscribe(observer) {
-    const listener = function (ev){
-      observer.next(ev);
-    };
-    
-    document.addEventListener('click', listener);
-    
-    return function unsubscribe() {
-      document.removeEventListener('click', listener)
-    };
-  }
-)
+const click$ = Rx.Observable.fromEvent(document, 'click')
 
-const subscription = click$.subscribe(function (ev) {
+const four$ = Rx.Observable.interval(4000).take(1);
+
+// Marble Diagram
+/*
+click$         --c-------c-c--c-c----c---c-c-c-c----
+four$          ---------------0|
+clickUntil4$   --c-------c-c--|
+*/
+
+const clickUntil4$ = click$.takeUntil(four$);
+
+clickUntil4$.subscribe(function (ev) {
   console.log(ev.clientX) || displayInPreview(ev.clientX);
 });
 
-setTimeout(function () {
-  subscription.unsubscribe();
-}, 4000);
-
-
-
-// display in plunker preview
 function displayInPreview(string) {
   var newDiv = document.createElement("div"); 
   var newContent = document.createTextNode(string); 

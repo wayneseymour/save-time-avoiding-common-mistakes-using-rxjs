@@ -4,14 +4,13 @@ const four$ = Rx.Observable.interval(4000).take(1);
 
 // Marble Diagram
 /*
-click$         --c-------c-c--c-c----c---c-c-c-c----
-four$          ---------------0|
-clickUntil4$   --c-------c-c--|
+click$      --c-------c-c--c-c----c---c-c-c-c----
+sixClicks$  --c-------ccc---c-c|  
 */
 
-const clickUntil4$ = click$.takeUntil(four$);
+const sixClicks$ = click$.take(6)
 
-clickUntil4$.subscribe(function (ev) {
+sixClicks$.subscribe(function (ev) {
   console.log(ev.clientX) || displayInPreview(ev.clientX);
 });
 

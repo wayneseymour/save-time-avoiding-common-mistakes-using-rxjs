@@ -1,19 +1,27 @@
-const click$ = Rx.Observable.fromEvent(document, 'click')
+const subject = new Rx.Subject()
 
-const four$ = Rx.Observable.interval(4000).take(1);
+// 1. Identify sources of data (subjects)
+// 2. Covert to Observables
+// 3. Compose
 
-// Marble Diagram
-/*
-click$      --c-------c-c--c-c----c---c-c-c-c----
-sixClicks$  --c-------ccc---c-c|  
-*/
+document.addEventListener('click', function (ev) {
+  subject.next(1);
+})
 
-const sixClicks$ = click$.take(6)
+fetch('https://api.quotable.io/random')
+  .then(x => x.json())
+  .then(x => {
+    setTimeout(() => {
+      console.log(`\n### : \n${JSON.stringify(x, null, 2)}`) 
+      subject.next(1)
+    }, 2000) 
+  })
 
-sixClicks$.subscribe(function (ev) {
-  console.log(ev.clientX) || displayInPreview(ev.clientX);
-});
+const count$ = subject.scan((acc, x) => acc + x, 0)
 
+count$.subscribe(x => {
+  console.log(`\n### x: \n\t${x}`) || displayInPreview(x)
+})
 function displayInPreview(string) {
   var newDiv = document.createElement("div"); 
   var newContent = document.createTextNode(string); 

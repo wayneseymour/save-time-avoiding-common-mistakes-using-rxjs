@@ -1,0 +1,12 @@
+{
+  "name": "save-time-avoiding-common-mistakes-using-rxjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Tre' Seymour",
+  "license": "ISC"
+}

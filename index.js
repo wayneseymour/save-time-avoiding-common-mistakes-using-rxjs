@@ -2,19 +2,28 @@ const userData$ = Rx.Observable.ajax({
   url: "https://api.quotable.io/random",
   method: "GET",
 });
-const click$ = Rx.Observable.fromEvent(document, "click");
+const click$ = Rx.Observable
+  .fromEvent(document, "click");
 
-const resWhenClick$$ = click$.map(ev => userData$)
+const resWhenClick$$ = click$
+  .map((ev) => userData$)
+  .mergeAll();
+
+/*
+-----c--------------c-------
+     \              \
+      ---r----       ---r--
+
+      mergeAll
+
+--------r------------r------
+*/
 
 resWhenClick$$.subscribe({
-  next: function fetchOnClick(res$) {
-    res$.subscribe({
-      next: (x) => {
-        const pretty = JSON.stringify(x, null, 2);
-        console.log(`\n### x: \n\t${pretty}`) || displayInPreview(pretty)
-      }
-    })
-  }
+  next: function fetchOnClick(data) {
+    const pretty = JSON.stringify(data, null, 2);
+    console.log(`\n### x: \n\t${pretty}`) || displayInPreview(pretty);
+  },
 });
 
 function displayInPreview(string) {

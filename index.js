@@ -1,16 +1,18 @@
-// const userData$ = Rx.Observable.ajax({
-//   url: "https://api.quotable.io/random",
-//   method: "GET",
-// });
-const click$ = Rx.Observable
-  .fromEvent(document, "click");
+const userData$ = Rx.Observable.ajax({
+  url: "https://api.quotable.io/random",
+  method: "GET",
+});
+const click$ = Rx.Observable.fromEvent(document, "click");
 
-const tickWhenClick$ = click$
-  .flatMap((ev) => Rx.Observable.interval(500))
+const tickWhenClick$ = click$.switchMap(
+  function subscribeToMostRecentInnerObservable(ev) {
+    return Rx.Observable.interval(500);
+  }
+);
 
 tickWhenClick$.subscribe((data) => {
-  console.log(data)
-})
+  console.log(data);
+});
 
 function displayInPreview(string) {
   var newDiv = document.createElement("div");
